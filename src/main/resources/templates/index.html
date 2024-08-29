@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Emails Reçus</title>
+</head>
+<body>
+<h1>Liste des Emails</h1>
+<div th:each="email : ${emails}">
+    <h2>Objet : <span th:text="${email.subject}"></span></h2>
+    <p>De : <span th:text="${email.from}"></span></p>
+    <p>Texte : <span th:text="${email.text}"></span></p>
+
+    <h3>Pièces Jointes :</h3>
+    <ul>
+        <li th:each="attachment : ${email.attachments}" th:text="${attachment}"></li>
+    </ul>
+
+    <hr>
+</div>
+</body>
+</html>

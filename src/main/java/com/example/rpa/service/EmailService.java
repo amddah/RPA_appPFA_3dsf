@@ -28,8 +28,12 @@ import java.util.Properties;
 @Service
 public class EmailService {
 
-//    @Autowired
-//    private JavaMailSender mailSender;
+    @Autowired
+    private GptService gptService;
+    @Autowired
+     private ExractionTextServices exractionTextServices;
+    @Autowired
+    private TextCleanerService textCleanerService;
       List<EmailData> emailDataList = new ArrayList<>();
 
     public List<EmailData>  checkEmails() throws MessagingException, IOException {
@@ -72,6 +76,7 @@ public class EmailService {
                         if (bodyPart.isMimeType("text/plain")) {
                             String text = (String) bodyPart.getContent();
                             System.out.println("Text: " + text);
+
                             emailData.setText(text);
 
                         } else if (bodyPart.isMimeType("multipart/ALTERNATIVE")) {
@@ -83,6 +88,8 @@ public class EmailService {
                                     String text = (String) altBodyPart.getContent();
                                     System.out.println("Text from multipart/ALTERNATIVE: " + text);
                                     emailData.setText(text);
+                                    String cleanedContent = textCleanerService.cleanEmailContent(text);
+                                    String gptResponse = gptService.generateResponse(cleanedContent);
                                     break; // Usually, the plain text is first, so we can break once found.
                                 }
                             }
@@ -101,7 +108,16 @@ public class EmailService {
             }
         }
 
-
+//        for (Message message : messages) {
+//            if (message instanceof MimeMessage) {
+//                MimeMessage mimeMessage = (MimeMessage) message;
+//                String emailContent =exractionTextServices.extractTextFromMessage(mimeMessage); // Ta méthode d'extraction du texte
+//                //String gptResponse = gptService.generateResponse(emailContent);
+//                System.out.println("GPT Response: " + emailContent);
+//
+//                // Envoyer la réponse par email ou effectuer d'autres actions
+//            }else System.out.println("GPT Response: " );
+//        }
         inbox.close(false);
         store.close();
 

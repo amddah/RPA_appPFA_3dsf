@@ -48,7 +48,7 @@ public class EmailService {
 
         Session session = Session.getInstance(props);
         Store store = session.getStore("imaps");
-        store.connect("imap.gmail.com", "abdelkbir.amddah@gmail.com", "zksb pncc gnsj llco");
+        store.connect("imap.gmail.com", "votre email", "mots de passe de application");
 
         // Open the inbox folder
         Folder inbox = store.getFolder("INBOX");

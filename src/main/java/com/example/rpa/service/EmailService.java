@@ -1,6 +1,9 @@
 package com.example.rpa.service;
 
 import com.example.rpa.models.EmailData;
+import com.example.rpa.models.EmailMessage;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,6 +37,8 @@ public class EmailService {
      private ExractionTextServices exractionTextServices;
     @Autowired
     private TextCleanerService textCleanerService;
+    @Autowired
+    private  EmailSenderService emailSenderService;
       List<EmailData> emailDataList = new ArrayList<>();
 
     public List<EmailData>  checkEmails() throws MessagingException, IOException {
@@ -48,7 +53,7 @@ public class EmailService {
 
         Session session = Session.getInstance(props);
         Store store = session.getStore("imaps");
-        store.connect("imap.gmail.com", "votre email", "mots de passe de application");
+        store.connect("imap.gmail.com", "abdelkbir.amddah@gmail.com", "zksb pncc gnsj llco");
 
         // Open the inbox folder
         Folder inbox = store.getFolder("INBOX");
@@ -90,6 +95,9 @@ public class EmailService {
                                     emailData.setText(text);
                                     String cleanedContent = textCleanerService.cleanEmailContent(text);
                                     String gptResponse = gptService.generateResponse(cleanedContent);
+                                    JsonObject jsonObject = JsonParser.parseString(gptResponse).getAsJsonObject();
+                                    System.out.println(jsonObject.get("response").getAsString());
+                                    emailSenderService.sendEmail(new EmailMessage(from,subject,jsonObject.get("response").getAsString()));
                                     break; // Usually, the plain text is first, so we can break once found.
                                 }
                             }

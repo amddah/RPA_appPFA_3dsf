@@ -1,7 +1,12 @@
 package com.example.rpa.models;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmailData {
 
     private String subject;
@@ -9,10 +14,9 @@ public class EmailData {
     private List<String> attachments;
     private String text;
 
-    public EmailData(String subject, String from, List<String> attachments, String text) {
+    public EmailData(String subject, String from, String text) {
         this.subject = subject;
         this.from = from;
-        this.attachments = attachments;
         this.text = text;
     }
 

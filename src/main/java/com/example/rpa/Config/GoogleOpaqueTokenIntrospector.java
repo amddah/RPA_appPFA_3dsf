@@ -20,10 +20,13 @@ public class GoogleOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
     @Override
     public OAuth2AuthenticatedPrincipal introspect(String token) {
 
-       UserInfo user= userInfoClient.get().uri(uriBuilder -> uriBuilder.path("oauth2/v3/userinfo").query("access_token"+ token).build())
-                 .retrieve()
-                 .bodyToMono(UserInfo.class)
-               .block();
+        UserInfo user = userInfoClient.get()
+                .uri("https://www.googleapis.com/oauth2/v3/userinfo")
+                .header("Authorization", "Bearer " + token) // Use Authorization header
+                .retrieve()
+                .bodyToMono(UserInfo.class)
+                .block();
+
 
         Map<String,Object> attributs =new HashMap<>();
 

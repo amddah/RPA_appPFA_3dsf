@@ -57,7 +57,7 @@ public class AuthControler {
         }catch (IOException e){
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        System.out.println("token="+token);
+
         return ResponseEntity.ok(new TokenDto(token));
     }
 }

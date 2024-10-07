@@ -26,8 +26,6 @@ public class GoogleOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
                 .retrieve()
                 .bodyToMono(UserInfo.class)
                 .block();
-
-
         Map<String,Object> attributs =new HashMap<>();
 
         attributs.put("sub",user.sub());

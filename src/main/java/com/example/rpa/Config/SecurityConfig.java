@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .exceptionHandling(customizer->customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 
-                .sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(registry->{
             registry.requestMatchers("/","/auth/**","/public").permitAll();
             registry.anyRequest().authenticated();

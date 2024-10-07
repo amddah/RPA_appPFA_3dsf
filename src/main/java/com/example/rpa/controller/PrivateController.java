@@ -16,8 +16,8 @@ public class PrivateController {
 
         @AuthenticationPrincipal(expression = "name") String name){
 
-        System.out.println("name"+name);
-        return ResponseEntity.ok(new MessageDto("private content "+name));
+
+        return ResponseEntity.ok(new MessageDto( name));
 
     }
 

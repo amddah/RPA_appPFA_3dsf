@@ -27,7 +27,7 @@ public class EmailSenderService {
             // Utiliser la réponse pour envoyer l'email
             if (response.getStatusCode() == HttpStatus.OK) {
                 String generatedResponse = response.getBody();
-                send(generatedResponse, emailMessage.getTo(), emailMessage.getSubject());
+                send(generatedResponse, emailMessage.getDist(), emailMessage.getSubject());
             } else {
                 // Gérer le cas où le statut n'est pas OK
                 System.out.println("Erreur lors de la génération de la réponse email : " + response.getStatusCode());

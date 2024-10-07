@@ -1,41 +1,41 @@
 package com.example.rpa.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Entity
+@Data
 
 public class EmailMessage {
 
-    private String to;
+    @Id
+    private Integer idEmailM;
+    private String dist;
     private String subject;
     private String message;
 
     public EmailMessage() {
     }
     public EmailMessage(String to, String subject, String message) {
-        this.to = to;
+        this.dist = to;
         this.subject = subject;
         this.message = message;
     }
 
-    public void setTo(String to) {
-        this.to = to;
-    }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
-    public String getTo() {
-        return to;
-    }
+    @OneToMany(mappedBy = "emailMessage", cascade = CascadeType.ALL)
+    private List<PieceJointe> pieceJointeList;
 
-    public String getSubject() {
-        return subject;
-    }
+    @OneToMany(mappedBy = "emailMessage", cascade = CascadeType.ALL)
+    private List<ReponseEmail> reponses;
 
-    public String getMessage() {
-        return message;
-    }
 }

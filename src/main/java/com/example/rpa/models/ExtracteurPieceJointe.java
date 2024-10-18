@@ -1,14 +1,12 @@
 package com.example.rpa.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,6 +16,7 @@ import java.util.List;
 public class ExtracteurPieceJointe {
 
    @Id
+   @GeneratedValue
    private Integer id;
 
    private String nomFichier;

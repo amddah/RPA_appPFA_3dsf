@@ -2,6 +2,8 @@ package com.example.rpa.service;
 
 import com.example.rpa.models.EmailData;
 import com.example.rpa.models.EmailMessage;
+import com.example.rpa.models.ExtracteurPieceJointe;
+import com.example.rpa.service.Impl.ExtracteurImpl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,7 +37,7 @@ public class EmailService {
     @Autowired
     private GptService gptService;
     @Autowired
-     private ExractionTextServices exractionTextServices;
+     private ExtracteurImpl extracteurPieceJointe;
     @Autowired
     private TextCleanerService textCleanerService;
     @Autowired
@@ -104,11 +107,16 @@ public class EmailService {
 
                         } else if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
                             String fileName = bodyPart.getFileName();
-                            File file = new File("C:\\Users\\hp\\OneDrive\\Desktop\\workspace\\PFA\\dossier" + fileName);
+                            File file = new File("C:\\Users\\Pc\\Desktop\\workspace\\PFA\\dossier" + fileName);
                             try (FileOutputStream output = new FileOutputStream(file)) {
                                 output.write(bodyPart.getInputStream().readAllBytes());
                             }
                             System.out.println("Attachment saved: " + file.getAbsolutePath());
+                            ExtracteurPieceJointe  extracteurPieceJointe1 =new ExtracteurPieceJointe();
+                            extracteurPieceJointe1.setDateExtraction(new Date());
+                            extracteurPieceJointe1.setNomFichier(fileName);
+
+                            extracteurPieceJointe.create(extracteurPieceJointe1);
                         }
                     }
                 }
@@ -116,16 +124,6 @@ public class EmailService {
             }
         }
 
-//        for (Message message : messages) {
-//            if (message instanceof MimeMessage) {
-//                MimeMessage mimeMessage = (MimeMessage) message;
-//                String emailContent =exractionTextServices.extractTextFromMessage(mimeMessage); // Ta méthode d'extraction du texte
-//                //String gptResponse = gptService.generateResponse(emailContent);
-//                System.out.println("GPT Response: " + emailContent);
-//
-//                // Envoyer la réponse par email ou effectuer d'autres actions
-//            }else System.out.println("GPT Response: " );
-//        }
         inbox.close(false);
         store.close();
 

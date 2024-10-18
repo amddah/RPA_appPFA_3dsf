@@ -32,9 +32,6 @@ public class EmailControler {
         List<EmailData> emails = emailService.checkEmails();
         model.addAttribute("emails", emails);
 
-
-        //emailSenderService.sendEmail(new EmailMessage("abdelkbir.amddah@gmail.com","abdelkbir.amddah@gmail.com",  "this is a test"));
-
         return ResponseEntity.ok().build();
     }
 

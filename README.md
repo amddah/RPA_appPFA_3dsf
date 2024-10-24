@@ -18,7 +18,10 @@ Avant de pouvoir exécuter l'application, assurez-vous d'avoir installé les pr�
 
 - **MySQL** : Base de données utilisée pour stocker les emails traités et les informations pertinentes.
 
-
+## Repositories associés
+- Front-end de l'application : [Rpa_FrontEnd](https://github.com/amddah/Rpa_FrontEnd)
+- Application d'envoi des réponses aux emails : [EmailSender](https://github.com/amddah/EmailSender.git)
+= application de generation des reponse : [Api Flask](https://github.com/amddah/Rpa_FrontEnd)
 
 
 ## Installation

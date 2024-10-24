@@ -1,5 +1,6 @@
 package com.example.rpa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,10 +28,8 @@ public class EmailMessage {
         this.message = message;
     }
 
-
-
-
     @OneToMany(mappedBy = "emailMessage", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PieceJointe> pieceJointeList;
 
     @OneToMany(mappedBy = "emailMessage", cascade = CascadeType.ALL)

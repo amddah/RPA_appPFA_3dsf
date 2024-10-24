@@ -3,12 +3,16 @@ package com.example.rpa.service;
 import com.example.rpa.models.EmailData;
 import com.example.rpa.models.EmailMessage;
 import com.example.rpa.models.ExtracteurPieceJointe;
+import com.example.rpa.models.PieceJointe;
+import com.example.rpa.service.Impl.EmailMessageImpl;
 import com.example.rpa.service.Impl.ExtracteurImpl;
+import com.example.rpa.service.Impl.PieceJointeImpl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -26,6 +30,9 @@ import javax.mail.search.FlagTerm;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +41,7 @@ import java.util.Properties;
 @Service
 public class EmailService {
 
+    private String chemin;
     @Autowired
     private GptService gptService;
     @Autowired
@@ -42,8 +50,15 @@ public class EmailService {
     private TextCleanerService textCleanerService;
     @Autowired
     private  EmailSenderService emailSenderService;
+
+    @Autowired
+    private EmailMessageImpl emailMessage;
+
+    @Autowired
+    private PieceJointeImpl pieceJointe;
       List<EmailData> emailDataList = new ArrayList<>();
 
+    @Scheduled(fixedRate = 600000000)
     public List<EmailData>  checkEmails() throws MessagingException, IOException {
         // Get the default Session object
 
@@ -64,7 +79,7 @@ public class EmailService {
 
         // Get the list of unread messages
         Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
-
+        EmailMessage emailMessage1 =new EmailMessage();
         for (Message message : messages) {
             if (message instanceof MimeMessage) {
                 MimeMessage mimeMessage = (MimeMessage) message;
@@ -101,22 +116,39 @@ public class EmailService {
                                     JsonObject jsonObject = JsonParser.parseString(gptResponse).getAsJsonObject();
                                     System.out.println(jsonObject.get("response").getAsString());
                                     emailSenderService.sendEmail(new EmailMessage(from,subject,jsonObject.get("response").getAsString()));
+
+                                    emailMessage1.setDist(from);
+                                    emailMessage1.setMessage(text);
+                                    emailMessage1.setSubject(subject);
+                                    emailMessage.create(emailMessage1);
                                     break; // Usually, the plain text is first, so we can break once found.
                                 }
                             }
 
                         } else if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
                             String fileName = bodyPart.getFileName();
-                            File file = new File("C:\\Users\\Pc\\Desktop\\workspace\\PFA\\dossier" + fileName);
+                            //pour cree un pice jointe dans base donnee
+                            PieceJointe pieceJointe1 =new PieceJointe();
+                            File file = new File(chemin + fileName);
                             try (FileOutputStream output = new FileOutputStream(file)) {
                                 output.write(bodyPart.getInputStream().readAllBytes());
+                                pieceJointe1.setContenu(bodyPart.getInputStream().readAllBytes());
+                                pieceJointe1.setNomFichier(fileName);
+                                Path path = Paths.get(chemin+ fileName);
+                                String mimeType = Files.probeContentType(path);
+                                pieceJointe1.setTypeFichier(mimeType);
+
                             }
                             System.out.println("Attachment saved: " + file.getAbsolutePath());
                             ExtracteurPieceJointe  extracteurPieceJointe1 =new ExtracteurPieceJointe();
                             extracteurPieceJointe1.setDateExtraction(new Date());
                             extracteurPieceJointe1.setNomFichier(fileName);
 
+                            pieceJointe1.setExtracteurPieceJointe(extracteurPieceJointe1);
+                            pieceJointe1.setEmailMessage(emailMessage1);
                             extracteurPieceJointe.create(extracteurPieceJointe1);
+                            pieceJointe.create(pieceJointe1);
+
                         }
                     }
                 }

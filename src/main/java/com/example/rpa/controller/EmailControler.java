@@ -2,8 +2,11 @@ package com.example.rpa.controller;
 
 import com.example.rpa.models.EmailData;
 import com.example.rpa.models.EmailMessage;
+import com.example.rpa.models.PieceJointe;
 import com.example.rpa.service.EmailSenderService;
 import com.example.rpa.service.EmailService;
+import com.example.rpa.service.Impl.EmailMessageImpl;
+import com.example.rpa.service.Impl.PieceJointeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,21 +26,29 @@ public class EmailControler {
     private EmailService emailService ;
 
     @Autowired
-    private EmailSenderService emailSenderService;
-    @GetMapping("/s")
-    public ResponseEntity getEmails(Model model) throws MessagingException , IOException {
+    private EmailMessageImpl emailMessage;
 
-            emailService.checkEmails();
+    @Autowired
+    private PieceJointeImpl pieceJointe;
 
-        List<EmailData> emails = emailService.checkEmails();
-        model.addAttribute("emails", emails);
+    @GetMapping("/emails")
+    public List<EmailMessage> getEmaills(){
 
-        return ResponseEntity.ok().build();
+        return emailMessage.findAll();
     }
-
     @GetMapping("/user")
     public Principal user(Principal user){
         return user;
     }
+
+
+    @GetMapping("/pieces")
+    public List<PieceJointe> getPieces(){
+
+       return pieceJointe.findAll();
+
+    }
+
+
 
 }

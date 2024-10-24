@@ -6,6 +6,7 @@ import com.example.rpa.service.interfaces.EmailMessageInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,5 +40,9 @@ public class EmailMessageImpl implements EmailMessageInter {
     public void delete(Integer id) {
 
         emailMessageRepository.deleteById(id);
+    }
+
+    public List<EmailMessage> findAll(){
+        return this.emailMessageRepository.findAll();
     }
 }

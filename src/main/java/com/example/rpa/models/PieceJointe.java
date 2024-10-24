@@ -1,5 +1,6 @@
 package com.example.rpa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +20,12 @@ public class PieceJointe {
 
     private String typeFichier;
 
+    @Lob
+    @Column(name = "contenu", columnDefinition = "LONGBLOB")
     private byte[] contenu ;
 
-    @ManyToOne
-
+    @ManyToOne()
+    @JsonIgnore
     private   EmailMessage emailMessage;
 
 

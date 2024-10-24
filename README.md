@@ -21,7 +21,7 @@ Avant de pouvoir exécuter l'application, assurez-vous d'avoir installé les pr�
 ## Repositories associés
 - Front-end de l'application : [Rpa_FrontEnd](https://github.com/amddah/Rpa_FrontEnd)
 - Application d'envoi des réponses aux emails : [EmailSender](https://github.com/amddah/EmailSender.git)
-= application de generation des reponse : [Api Flask](https://github.com/amddah/Rpa_FrontEnd)
+- Application de generation des reponse : [Api Flask](https://github.com/amddah/genAI_api)
 
 
 ## Installation

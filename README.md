@@ -49,6 +49,3 @@ Avant de pouvoir exécuter l'application, assurez-vous d'avoir installé les pr�
 
 L'application peut évoluer en intégrant de nouvelles fonctionnalités comme la génération de rapports automatiques, la gestion des processus financiers, et une classification plus avancée des emails basée sur le contenu.
 
-## Contributeurs
-
-- **Nom** : Abdelkbir Amddah
